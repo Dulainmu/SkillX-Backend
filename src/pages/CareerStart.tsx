@@ -49,17 +49,12 @@ const CareerStart = () => {
     const fetchCareerDetails = async () => {
       try {
         setIsLoading(true);
-        if (!careerId) return;
-        const foundCareer = await recommendationsApi.getCareerById(careerId);
+        const recommendations = await recommendationsApi.getRecommendations();
+        const foundCareer = recommendations.find(c => c.id === careerId);
+        
         if (foundCareer) {
           setCareer(foundCareer);
           setSkills(generateSkillsData(foundCareer.name));
-        } else {
-          toast({
-            title: 'Error',
-            description: 'Career not found.',
-            variant: 'destructive',
-          });
         }
       } catch (error) {
         console.error('Failed to load career details:', error);

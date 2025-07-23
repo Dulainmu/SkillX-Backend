@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, EyeOff, UserPlus, Lock, Mail, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -17,16 +16,14 @@ const Signup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { register } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       toast({
@@ -36,23 +33,13 @@ const Signup = () => {
       });
       return;
     }
-    setLoading(true);
-    try {
-      await register(formData.name, formData.email, formData.password);
-      toast({
-        title: "Account Created!",
-        description: "Welcome! Your account has been created successfully.",
-      });
-      navigate('/');
-    } catch (error: any) {
-      toast({
-        title: "Signup Failed",
-        description: error.message || 'Registration failed',
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+    console.log('Signing up with:', formData);
+    toast({
+      title: "Account Created!",
+      description: "Welcome to SkillX. Redirecting to login...",
+    });
+    // Redirect to login after successful signup
+    setTimeout(() => navigate('/'), 2000);
   };
 
   return (
@@ -84,7 +71,6 @@ const Signup = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className="h-11 pl-10"
-                    disabled={loading}
                   />
                 </div>
               </div>
@@ -102,7 +88,6 @@ const Signup = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className="h-11 pl-10"
-                    disabled={loading}
                   />
                 </div>
               </div>
@@ -120,7 +105,6 @@ const Signup = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className="h-11 pl-10 pr-10"
-                    disabled={loading}
                   />
                   <Button
                     type="button"
@@ -128,7 +112,6 @@ const Signup = () => {
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
-                    tabIndex={-1}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -152,7 +135,6 @@ const Signup = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className="h-11 pl-10 pr-10"
-                    disabled={loading}
                   />
                   <Button
                     type="button"
@@ -160,7 +142,6 @@ const Signup = () => {
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    tabIndex={-1}
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -181,21 +162,9 @@ const Signup = () => {
                 type="submit" 
                 className="w-full h-11 text-base font-medium"
                 variant="success"
-                disabled={loading}
               >
                 <UserPlus className="w-4 h-4 mr-2" />
-                {loading ? 'Creating Account...' : 'Create Account'}
-              </Button>
-
-              <Button
-                type="button"
-                className="w-full h-11 text-base font-medium"
-                variant="outline"
-                onClick={() => navigate('/mentor-signup')}
-                disabled={loading}
-              >
-                <UserPlus className="w-4 h-4 mr-2" />
-                Sign Up as Mentor
+                Create Account
               </Button>
 
               <div className="text-center text-sm text-muted-foreground">

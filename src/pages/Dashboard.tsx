@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -27,7 +27,6 @@ import {
   ExternalLink,
   Users
 } from 'lucide-react';
-import { authApi } from '@/services/authApi';
 
 interface Course {
   id: string;
@@ -70,8 +69,6 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { hasStartedCareer, currentCareer, resetCareer } = useCareer();
   const { toast } = useToast();
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [totalXp, setTotalXp] = useState(1250);
   const [level, setLevel] = useState(3);
   const [learningModules, setLearningModules] = useState<LearningModule[]>([]);
@@ -82,23 +79,6 @@ const Dashboard = () => {
       navigate('/');
       return;
     }
-
-    const fetchUser = async () => {
-      setIsLoading(true);
-      try {
-        const res = await authApi.getCurrentUser();
-        setUser(res.data.user);
-      } catch (err: any) {
-        toast({
-          title: 'Error',
-          description: err.message || 'Failed to load user profile.',
-          variant: 'destructive',
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchUser();
 
     // Initialize learning modules and projects
     setLearningModules([
@@ -234,10 +214,7 @@ const Dashboard = () => {
         ]
       }
     ]);
-  }, [hasStartedCareer, navigate, toast]);
-
-  if (isLoading) return <div className="text-center mt-8">Loading...</div>;
-  if (!user) return <div className="text-center mt-8">User not found.</div>;
+  }, [hasStartedCareer, navigate]);
 
   const completedModules = learningModules.filter(m => m.completed).length;
   const completedProjects = projects.filter(p => p.status === 'completed').length;

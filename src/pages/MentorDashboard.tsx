@@ -19,7 +19,6 @@ import {
   Download,
   Award
 } from 'lucide-react';
-import { authApi } from '@/services/authApi';
 
 interface ProjectSubmission {
   id: string;
@@ -36,32 +35,11 @@ interface ProjectSubmission {
 }
 
 const MentorDashboard = () => {
-  const [mentor, setMentor] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const [submissions, setSubmissions] = useState<ProjectSubmission[]>([]);
   const [selectedSubmission, setSelectedSubmission] = useState<ProjectSubmission | null>(null);
   const [feedback, setFeedback] = useState('');
   const [score, setScore] = useState(0);
-
-  useEffect(() => {
-    const fetchMentor = async () => {
-      setIsLoading(true);
-      try {
-        const res = await authApi.getCurrentUser();
-        setMentor(res.data.user);
-      } catch (err: any) {
-        toast({
-          title: 'Error',
-          description: err.message || 'Failed to load mentor profile.',
-          variant: 'destructive',
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchMentor();
-  }, [toast]);
 
   useEffect(() => {
     // Mock data for project submissions
@@ -158,9 +136,6 @@ const MentorDashboard = () => {
   const pendingCount = submissions.filter(s => s.status === 'pending').length;
   const reviewedCount = submissions.filter(s => s.status === 'reviewed').length;
   const approvedCount = submissions.filter(s => s.status === 'approved').length;
-
-  if (isLoading) return <div className="text-center mt-8">Loading...</div>;
-  if (!mentor) return <div className="text-center mt-8">Mentor not found.</div>;
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background to-muted/10">

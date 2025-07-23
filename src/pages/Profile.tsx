@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -28,12 +27,8 @@ import {
   Zap,
   Award
 } from 'lucide-react';
-import { authApi } from '@/services/authApi';
 
 const Profile = () => {
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
@@ -44,42 +39,6 @@ const Profile = () => {
     joinDate: 'January 2024',
     bio: 'Passionate about technology and career development. Currently exploring UX Design and Software Engineering paths.'
   });
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      setIsLoading(true);
-      try {
-        const res = await authApi.getCurrentUser();
-        setUser(res.data.user);
-      } catch (err: any) {
-        toast({
-          title: 'Error',
-          description: err.message || 'Failed to load user profile.',
-          variant: 'destructive',
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchUser();
-  }, [toast]);
-
-  const handleLogout = async () => {
-    try {
-      await authApi.logout();
-      toast({ title: 'Logged out', description: 'You have been logged out.' });
-      navigate('/login');
-    } catch (err: any) {
-      toast({
-        title: 'Logout Failed',
-        description: err.message || 'Failed to logout.',
-        variant: 'destructive',
-      });
-    }
-  };
-
-  if (isLoading) return <div className="text-center mt-8">Loading...</div>;
-  if (!user) return <div className="text-center mt-8">User not found.</div>;
 
   // Mock user progress data
   const userStats = {
