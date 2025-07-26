@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 4000;
 const allowedOrigins = [
   'http://localhost:8080', // Local development
   'http://localhost:3000', // Alternative local port
+  'http://localhost:5173', // Vite default port
   process.env.FRONTEND_URL, // Production frontend URL
 ].filter(Boolean); // Remove undefined values
 
