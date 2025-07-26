@@ -32,6 +32,15 @@ app.use(cors({
 
 app.use(express.json());
 
+// Handle double slash URLs by redirecting to correct path
+app.use((req, res, next) => {
+  if (req.url.includes('//')) {
+    const correctedUrl = req.url.replace(/\/+/g, '/');
+    return res.redirect(correctedUrl);
+  }
+  next();
+});
+
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
