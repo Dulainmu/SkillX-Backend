@@ -30,9 +30,19 @@ router.post('/avatar', authMiddleware, upload.single('avatar'), userController.u
 // Change password (protected)
 router.post('/change-password', authMiddleware, userController.changePassword);
 
+// Update notification settings (protected)
+router.put('/notification-settings', authMiddleware, userController.updateNotificationSettings);
+
 // Achievements endpoints
 router.get('/achievements', authMiddleware, userController.getAllAchievements);
 router.get('/my-achievements', authMiddleware, userController.getUserAchievements);
 router.post('/earn-achievement', authMiddleware, userController.earnAchievement);
+
+// Delete account (protected)
+router.delete('/delete-account', authMiddleware, userController.deleteAccount);
+
+// Password reset routes (public)
+router.post('/forgot-password', userController.forgotPassword);
+router.post('/reset-password', userController.resetPassword);
 
 module.exports = router; 

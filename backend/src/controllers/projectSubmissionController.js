@@ -1,5 +1,68 @@
 const ProjectSubmission = require('../models/ProjectSubmission');
 const CareerRole = require('../models/CareerRole');
+const User = require('../models/User');
+
+// Helper to award an achievement if not already earned
+async function awardAchievement(userId, achievementKey) {
+  const User = require('../models/User');
+  const Achievement = require('../models/Achievement');
+  const nodemailer = require('nodemailer');
+  
+  const user = await User.findById(userId);
+  if (!user) return;
+  
+  if (!user.achievements.includes(achievementKey)) {
+    user.achievements.push(achievementKey);
+    await user.save();
+    
+    // Check if achievement notifications are enabled
+    if (user.notificationSettings && user.notificationSettings.achievement) {
+      console.log(`Achievement earned: ${achievementKey} for user ${user.email}`);
+      
+      // Send email notification if email notifications are also enabled
+      if (user.notificationSettings.email) {
+        try {
+          const achievement = await Achievement.findOne({ key: achievementKey });
+          if (achievement) {
+            const transporter = nodemailer.createTransport({
+              service: 'gmail',
+              auth: {
+                user: process.env.EMAIL_USER || 'your-email@gmail.com',
+                pass: process.env.EMAIL_PASS || 'your-app-password'
+              }
+            });
+
+            const mailOptions = {
+              from: process.env.EMAIL_USER || 'your-email@gmail.com',
+              to: user.email,
+              subject: `🎉 Achievement Unlocked: ${achievement.title} - SkillX`,
+              html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                  <h2 style="color: #3b82f6;">🎉 Achievement Unlocked!</h2>
+                  <p>Congratulations ${user.name}!</p>
+                  <p>You've earned the <strong>${achievement.title}</strong> achievement!</p>
+                  <p><em>${achievement.description}</em></p>
+                  <div style="text-align: center; margin: 30px 0;">
+                    <div style="background-color: #fbbf24; color: white; padding: 20px; border-radius: 10px; display: inline-block;">
+                      <h3 style="margin: 0;">🏆 ${achievement.title}</h3>
+                    </div>
+                  </div>
+                  <p>Keep up the great work and continue your learning journey!</p>
+                  <p>Best regards,<br>The SkillX Team</p>
+                </div>
+              `
+            };
+
+            await transporter.sendMail(mailOptions);
+            console.log(`Achievement email sent to ${user.email}`);
+          }
+        } catch (error) {
+          console.error('Failed to send achievement email:', error);
+        }
+      }
+    }
+  }
+}
 
 // User: Submit a project
 exports.submitProject = async (req, res) => {
@@ -40,6 +103,15 @@ exports.submitProject = async (req, res) => {
       skills
     });
     await submission.save();
+    // Award 'First Steps' achievement if this is the user's first project
+    const totalProjects = await ProjectSubmission.countDocuments({ user: req.user.id });
+    if (totalProjects === 1) {
+      await awardAchievement(req.user.id, 'first_steps');
+    }
+    // Award 'Project Master' achievement if this is the user's 20th project
+    if (totalProjects === 20) {
+      await awardAchievement(req.user.id, 'project_master');
+    }
     res.status(201).json(submission);
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });

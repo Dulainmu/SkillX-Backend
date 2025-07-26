@@ -5,10 +5,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, EyeOff, User, Lock } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,15 +31,19 @@ const Login = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('skillx-token', data.token);
-        localStorage.setItem('skillx-role', data.role);
+        if (rememberMe) {
+          localStorage.setItem('skillx-token', data.token);
+          localStorage.setItem('skillx-role', data.role);
+        } else {
+          sessionStorage.setItem('skillx-token', data.token);
+          sessionStorage.setItem('skillx-role', data.role);
+        }
         if (data.role === 'mentor') {
           navigate('/mentor-dashboard');
         } else {
           navigate('/home');
         }
       } else {
-        // Optionally show a toast here
         alert(data.message || 'Login failed');
       }
     } catch (error) {
@@ -124,12 +134,21 @@ const Login = () => {
 
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center space-x-2 cursor-pointer">
-                  <input type="checkbox" className="rounded border-gray-300" />
+                  <input
+                    type="checkbox"
+                    className="rounded border-gray-300"
+                    checked={rememberMe}
+                    onChange={e => setRememberMe(e.target.checked)}
+                  />
                   <span className="text-muted-foreground">Remember me</span>
                 </label>
-                <Link to="#" className="text-primary hover:underline">
+                <button
+                  type="button"
+                  className="text-primary hover:underline bg-transparent border-0 p-0 m-0"
+                  onClick={() => setShowForgot(true)}
+                >
                   Forgot password?
-                </Link>
+                </button>
               </div>
             </CardContent>
 
@@ -170,6 +189,52 @@ const Login = () => {
             <Link to="#" className="text-primary hover:underline">Privacy Policy</Link>
           </p>
         </div>
+        <Dialog open={showForgot} onOpenChange={setShowForgot}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Reset your password</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Label htmlFor="forgot-email">Email Address</Label>
+              <Input
+                id="forgot-email"
+                type="email"
+                placeholder="Enter your email"
+                value={forgotEmail}
+                onChange={e => setForgotEmail(e.target.value)}
+                required
+              />
+            </div>
+            <DialogFooter>
+              <Button
+                onClick={async () => {
+                  if (!forgotEmail) {
+                    toast({ title: 'Error', description: 'Please enter your email address.', variant: 'destructive' });
+                    return;
+                  }
+                  
+                  try {
+                    const response = await fetch('http://localhost:4000/api/users/forgot-password', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ email: forgotEmail })
+                    });
+                    
+                    const data = await response.json();
+                    setShowForgot(false);
+                    setForgotEmail('');
+                    toast({ title: 'Reset Link Sent', description: data.message || 'If this email is registered, a reset link has been sent.' });
+                  } catch (error) {
+                    toast({ title: 'Error', description: 'Failed to send reset link. Please try again.', variant: 'destructive' });
+                  }
+                }}
+                className="w-full"
+              >
+                Send Reset Link
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

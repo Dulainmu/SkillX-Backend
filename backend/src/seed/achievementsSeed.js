@@ -31,11 +31,19 @@ const achievements = [
     title: 'Expert Level',
     description: 'Reach level 15',
     icon: 'Award'
+  },
+  {
+    key: 'first_career_path',
+    title: 'Starting 1st Career Path',
+    description: 'Started your first career path',
+    icon: 'BookOpen'
   }
 ];
 
+require('dotenv').config();
+
 async function seedAchievements() {
-  await mongoose.connect('mongodb://localhost:27017/skillx', { useNewUrlParser: true, useUnifiedTopology: true });
+  await mongoose.connect(process.env.MONGO_URI);
   await Achievement.deleteMany({});
   await Achievement.insertMany(achievements);
   console.log('Achievements seeded!');

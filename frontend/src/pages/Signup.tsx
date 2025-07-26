@@ -16,6 +16,7 @@ const Signup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -23,16 +24,36 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateName = (name: string) => {
+    // Only letters, spaces, hyphens, apostrophes
+    return /^[A-Za-z\s'-]+$/.test(name);
+  };
+  const validateEmail = (email: string) => {
+    // No only-numeric before @
+    const [local] = email.split('@');
+    if (/^\d+$/.test(local)) return false;
+    // Basic email regex
+    return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      toast({
-        title: "Password Mismatch",
-        description: "Passwords do not match. Please try again.",
-        variant: "destructive",
-      });
-      return;
+    let valid = true;
+    const newErrors = { name: '', email: '', password: '', confirmPassword: '' };
+    if (!validateName(formData.name)) {
+      newErrors.name = 'Name can only contain letters, spaces, hyphens, and apostrophes.';
+      valid = false;
     }
+    if (!validateEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email address (not only numbers before @).';
+      valid = false;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match.';
+      valid = false;
+    }
+    setErrors(newErrors);
+    if (!valid) return;
     try {
       const response = await fetch('http://localhost:4000/api/users/register', {
         method: 'POST',
@@ -97,6 +118,7 @@ const Signup = () => {
                     className="h-11 pl-10"
                   />
                 </div>
+                {errors.name && <div className="text-destructive text-xs mt-1">{errors.name}</div>}
               </div>
 
               <div className="space-y-2">
@@ -114,6 +136,7 @@ const Signup = () => {
                     className="h-11 pl-10"
                   />
                 </div>
+                {errors.email && <div className="text-destructive text-xs mt-1">{errors.email}</div>}
               </div>
 
               <div className="space-y-2">
@@ -154,11 +177,11 @@ const Signup = () => {
                     id="confirmPassword"
                     name="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Confirm your password"
+                    placeholder="Re-type your password"
                     required
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="h-11 pl-10 pr-10"
+                    className="h-11 pl-10"
                   />
                   <Button
                     type="button"
@@ -174,6 +197,7 @@ const Signup = () => {
                     )}
                   </Button>
                 </div>
+                {errors.confirmPassword && <div className="text-destructive text-xs mt-1">{errors.confirmPassword}</div>}
               </div>
 
               <div className="text-xs text-muted-foreground">

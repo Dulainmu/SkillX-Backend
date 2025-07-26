@@ -9,11 +9,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { useCareer } from '@/contexts/CareerContext';
+import { getApiUrl, authenticatedFetch } from '@/config/api';
 import { 
   User, 
   Mail, 
-  Phone, 
-  MapPin, 
   Calendar,
   Trophy,
   Star,
@@ -32,13 +32,12 @@ import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const { toast } = useToast();
+  const { currentCareer } = useCareer();
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: 'Alex Johnson',
     email: 'alex.johnson@example.com',
-    phone: '+1 (555) 123-4567',
-    location: 'San Francisco, CA',
-    joinDate: 'January 2024',
+    joinDate: '',
     bio: 'Passionate about technology and career development. Currently exploring UX Design and Software Engineering paths.',
     totalXp: 0,
     level: 1,
@@ -56,6 +55,19 @@ const Profile = () => {
   const [careerProgressError, setCareerProgressError] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
   const navigate = useNavigate();
+  const [profileErrors, setProfileErrors] = useState({ name: '' });
+  const [notificationSettings, setNotificationSettings] = useState({ email: true, achievement: true });
+  const [notificationLoading, setNotificationLoading] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [stats, setStats] = useState({
+    projects: 0,
+    skills: 0,
+    dayStreak: 0
+  });
+  const [passwordError, setPasswordError] = useState('');
+
+  const validateName = (name: string) => /^[A-Za-z\s'-]+$/.test(name);
 
   // Mock user progress data
   const currentCareers = [
@@ -64,34 +76,185 @@ const Profile = () => {
     { name: 'Data Scientist', progress: 15, xp: 200, status: 'Started' }
   ];
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const token = localStorage.getItem('skillx-token');
-      if (!token) return;
-      try {
-        const response = await fetch('http://localhost:4000/api/users/profile', {
-          headers: { 'Authorization': `Bearer ${token}` }
+  const fetchUserStats = async () => {
+    const token = localStorage.getItem('skillx-token');
+    if (!token) return;
+    try {
+      // Fetch projects count
+      const projectsRes = await fetch(getApiUrl('/api/submissions'), {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      let projectsCount = 0;
+      if (projectsRes.ok) {
+        const projects = await projectsRes.json();
+        projectsCount = projects.length;
+      }
+
+      // Fetch skills count (from completed modules)
+      const progressRes = await fetch(getApiUrl('/api/progress/all'), {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      let skillsCount = 0;
+      if (progressRes.ok) {
+        const progressData = await progressRes.json();
+        // Count completed steps as skills
+        skillsCount = progressData.reduce((total, career) => {
+          const completedSteps = (career.steps || []).filter(step => step.completed).length;
+          return total + completedSteps;
+        }, 0);
+      }
+
+      // Calculate day streak based on join date
+      let dayStreak = 0;
+      if (userInfo.joinDate) {
+        const joinDate = new Date(userInfo.joinDate);
+        const today = new Date();
+        const diffTime = Math.abs(today.getTime() - joinDate.getTime());
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        dayStreak = Math.min(diffDays, 30); // Cap at 30 days
+      }
+
+      setStats({
+        projects: projectsCount,
+        skills: skillsCount,
+        dayStreak: dayStreak
+      });
+    } catch (error) {
+      console.error('Failed to fetch user stats:', error);
+    }
+  };
+
+  const fetchProfile = async () => {
+    const token = localStorage.getItem('skillx-token');
+    if (!token) return;
+    try {
+      const response = await fetch(getApiUrl('/api/users/profile'), {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUserInfo({
+          name: data.name || '',
+          email: data.email || '',
+          joinDate: data.joinDate || '',
+          bio: data.bio || '',
+          totalXp: data.totalXp || 0,
+          level: data.level || 1,
+          avatar: data.avatar || ''
         });
-        if (response.ok) {
-          const data = await response.json();
-          setUserInfo({
-            name: data.name || '',
-            email: data.email || '',
-            phone: data.phone || '',
-            location: data.location || '',
-            joinDate: data.joinDate || '',
-            bio: data.bio || '',
-            totalXp: data.totalXp || 0,
-            level: data.level || 1,
-            avatar: data.avatar || ''
+        // Set notification settings from backend
+        if (data.notificationSettings) {
+          setNotificationSettings({
+            email: data.notificationSettings.email ?? true,
+            achievement: data.notificationSettings.achievement ?? true
           });
         }
-      } catch (error) {
-        toast({ title: 'Error', description: 'Failed to load profile', variant: 'destructive' });
       }
-    };
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to load profile', variant: 'destructive' });
+    }
+  };
+
+  // Update notification settings
+  const updateNotificationSettings = async (newSettings) => {
+    const token = localStorage.getItem('skillx-token');
+    if (!token) return;
+    setNotificationLoading(true);
+    try {
+      const response = await fetch(getApiUrl('/api/users/notification-settings'), {
+        method: 'PUT',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newSettings)
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setNotificationSettings(data.notificationSettings);
+        toast({ title: 'Success', description: 'Notification settings updated successfully' });
+      } else {
+        const errorData = await response.json();
+        toast({ title: 'Error', description: errorData.message || 'Failed to update notification settings', variant: 'destructive' });
+      }
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to update notification settings', variant: 'destructive' });
+    } finally {
+      setNotificationLoading(false);
+    }
+  };
+
+  const fetchCareerProgress = async () => {
+    setCareerProgressLoading(true);
+    setCareerProgressError('');
+    const token = localStorage.getItem('skillx-token');
+    if (!token) {
+      setCareerProgressError('No authentication token found');
+      setCareerProgressLoading(false);
+      return;
+    }
+    try {
+      // Fetch all user progress
+      const progressRes = await fetch(getApiUrl('/api/progress/all'), {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      let progressData = [];
+      if (progressRes.ok) {
+        progressData = await progressRes.json();
+        console.log('Progress data:', progressData);
+      } else {
+        console.error('Failed to fetch progress:', progressRes.status);
+        setCareerProgressError('Failed to load career progress');
+        setCareerProgressLoading(false);
+        return;
+      }
+      
+      // Fetch all careers
+      const careersRes = await fetch(getApiUrl('/api/recommendations/careers'));
+      let careersData = [];
+      if (careersRes.ok) {
+        const data = await careersRes.json();
+        careersData = data.careers;
+        console.log('Careers data:', careersData);
+      } else {
+        console.error('Failed to fetch careers:', careersRes.status);
+        setCareerProgressError('Failed to load career data');
+        setCareerProgressLoading(false);
+        return;
+      }
+      
+      // Map progress to career details
+      const mapped = progressData.map((progress) => {
+        const career = careersData.find(c => c._id === progress.careerRole);
+        const completedSteps = (progress.steps || []).filter(s => s.completed).length;
+        const totalSteps = (progress.steps || []).length;
+        console.log(`Career ${progress.careerRole}: ${completedSteps}/${totalSteps} steps completed`);
+        return {
+          name: career ? career.name : `Career ${progress.careerRole}`,
+          progress: totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0,
+          xp: career ? career.totalXp || 0 : 0,
+          status: progress.completedAt ? 'Completed' : 'In Progress',
+        };
+      });
+      console.log('Mapped career progress:', mapped);
+      setCareerProgress(mapped);
+    } catch (err) {
+      console.error('Error fetching career progress:', err);
+      setCareerProgressError('Failed to load career progress');
+    }
+    setCareerProgressLoading(false);
+  };
+
+  useEffect(() => {
     fetchProfile();
   }, []);
+
+  // Fetch user stats after profile is loaded
+  useEffect(() => {
+    if (userInfo.joinDate) {
+      fetchUserStats();
+    }
+  }, [userInfo.joinDate]);
 
   useEffect(() => {
     const fetchAchievements = async () => {
@@ -100,7 +263,7 @@ const Profile = () => {
       const token = localStorage.getItem('skillx-token');
       if (!token) return;
       try {
-        const response = await fetch('http://localhost:4000/api/users/my-achievements', {
+        const response = await fetch(getApiUrl('/api/users/my-achievements'), {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (response.ok) {
@@ -118,54 +281,21 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    const fetchCareerProgress = async () => {
-      setCareerProgressLoading(true);
-      setCareerProgressError('');
-      const token = localStorage.getItem('skillx-token');
-      if (!token) return;
-      try {
-        // Fetch all user progress
-        const progressRes = await fetch('http://localhost:4000/api/progress/all', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        let progressData = [];
-        if (progressRes.ok) {
-          progressData = await progressRes.json();
-        }
-        // Fetch all careers
-        const careersRes = await fetch('http://localhost:4000/api/recommendations/careers');
-        let careersData = [];
-        if (careersRes.ok) {
-          const data = await careersRes.json();
-          careersData = data.careers;
-        }
-        // Map progress to career details
-        const mapped = progressData.map((progress) => {
-          const career = careersData.find(c => c.id === progress.careerRole || c._id === progress.careerRole);
-          const completedSteps = (progress.steps || []).filter(s => s.completed).length;
-          const totalSteps = (progress.steps || []).length;
-          return {
-            name: career ? career.name : 'Unknown Career',
-            progress: totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0,
-            xp: career ? career.totalXp || 0 : 0,
-            status: progress.completedAt ? 'Completed' : 'In Progress',
-          };
-        });
-        setCareerProgress(mapped);
-      } catch (err) {
-        setCareerProgressError('Failed to load career progress');
-      }
-      setCareerProgressLoading(false);
-    };
     fetchCareerProgress();
   }, []);
 
   const handleSave = async () => {
     setIsEditing(false);
+    if (!validateName(userInfo.name)) {
+      setProfileErrors({ name: 'Name can only contain letters, spaces, hyphens, and apostrophes.' });
+      setIsEditing(true);
+      return;
+    }
+    setProfileErrors({ name: '' });
     const token = localStorage.getItem('skillx-token');
     if (!token) return;
     try {
-      const response = await fetch('http://localhost:4000/api/users/profile', {
+      const response = await fetch(getApiUrl('/api/users/profile'), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -173,8 +303,6 @@ const Profile = () => {
         },
         body: JSON.stringify({
           name: userInfo.name,
-          phone: userInfo.phone,
-          location: userInfo.location,
           bio: userInfo.bio
         })
       });
@@ -201,7 +329,7 @@ const Profile = () => {
     const token = localStorage.getItem('skillx-token');
     if (!token) return;
     try {
-      const response = await fetch('http://localhost:4000/api/users/reset-account', {
+      const response = await fetch(getApiUrl('/api/users/reset-account'), {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -224,7 +352,7 @@ const Profile = () => {
     const formData = new FormData();
     formData.append('avatar', file);
     try {
-      const response = await fetch('http://localhost:4000/api/users/avatar', {
+      const response = await fetch(getApiUrl('/api/users/avatar'), {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -244,9 +372,15 @@ const Profile = () => {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     setIsChangingPassword(true);
+    setPasswordError('');
+    if (passwordForm.newPassword !== confirmNewPassword) {
+      setPasswordError('New passwords do not match.');
+      setIsChangingPassword(false);
+      return;
+    }
     const token = localStorage.getItem('skillx-token');
     try {
-      const response = await fetch('http://localhost:4000/api/users/change-password', {
+      const response = await fetch(getApiUrl('/api/users/change-password'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -257,14 +391,36 @@ const Profile = () => {
       if (response.ok) {
         toast({ title: 'Password Changed', description: 'Your password has been updated.' });
         setPasswordForm({ currentPassword: '', newPassword: '' });
+        setConfirmNewPassword('');
       } else {
         const data = await response.json();
+        setPasswordError(data.message || 'Failed to change password');
         toast({ title: 'Change Failed', description: data.message || 'Failed to change password', variant: 'destructive' });
       }
     } catch (error) {
+      setPasswordError('Failed to change password');
       toast({ title: 'Change Failed', description: 'Failed to change password', variant: 'destructive' });
     }
     setIsChangingPassword(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) return;
+    const token = localStorage.getItem('skillx-token');
+    try {
+      const response = await fetch(getApiUrl('/api/users/delete-account'), {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        toast({ title: 'Account Deleted', description: 'Your account has been deleted.' });
+        setTimeout(() => window.location.href = '/login', 2000);
+      } else {
+        toast({ title: 'Delete Failed', description: 'Failed to delete account.', variant: 'destructive' });
+      }
+    } catch (error) {
+      toast({ title: 'Delete Failed', description: 'Failed to delete account.', variant: 'destructive' });
+    }
   };
 
   return (
@@ -326,15 +482,15 @@ const Profile = () => {
                         <div className="text-xs text-muted-foreground">Total XP</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-secondary">0</div>
+                        <div className="text-2xl font-bold text-secondary">{stats.projects}</div>
                         <div className="text-xs text-muted-foreground">Projects</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-accent">0</div>
+                        <div className="text-2xl font-bold text-black">{stats.skills}</div>
                         <div className="text-xs text-muted-foreground">Skills</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-orange-500">0</div>
+                        <div className="text-2xl font-bold text-orange-500">{stats.dayStreak}</div>
                         <div className="text-xs text-muted-foreground">Day Streak</div>
                       </div>
                     </div>
@@ -391,6 +547,9 @@ const Profile = () => {
                               onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
                               className="mt-1"
                             />
+                            {isEditing && profileErrors.name && (
+                              <div className="text-destructive text-xs mt-1">{profileErrors.name}</div>
+                            )}
                           </div>
                           <div>
                             <label className="text-sm font-medium text-muted-foreground">Bio</label>
@@ -412,14 +571,6 @@ const Profile = () => {
                             <span className="text-sm">{userInfo.email}</span>
                           </div>
                           <div className="flex items-center gap-3">
-                            <Phone className="w-4 h-4 text-muted-foreground" />
-                            <span className="text-sm">{userInfo.phone}</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <MapPin className="w-4 h-4 text-muted-foreground" />
-                            <span className="text-sm">{userInfo.location}</span>
-                          </div>
-                          <div className="flex items-center gap-3">
                             <Calendar className="w-4 h-4 text-muted-foreground" />
                             <span className="text-sm">Joined {userInfo.joinDate}</span>
                           </div>
@@ -437,7 +588,18 @@ const Profile = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/dashboard')}>
+                      <Button className="w-full justify-start" variant="outline" onClick={() => {
+                        if (currentCareer) {
+                          navigate('/dashboard');
+                        } else {
+                          toast({
+                            title: "No Career Selected",
+                            description: "Please choose a career path to start learning.",
+                            variant: "destructive"
+                          });
+                          navigate('/browse-careers');
+                        }
+                      }}>
                         <BookOpen className="w-4 h-4 mr-2" />
                         Continue Learning
                       </Button>
@@ -464,12 +626,32 @@ const Profile = () => {
 
               {/* Career Progress Tab */}
               <TabsContent value="careers" className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-bold">Career Progress</h2>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => {
+                      setCareerProgressLoading(true);
+                      setCareerProgressError('');
+                      fetchCareerProgress();
+                    }}
+                    disabled={careerProgressLoading}
+                  >
+                    {careerProgressLoading ? 'Refreshing...' : 'Refresh'}
+                  </Button>
+                </div>
                 {careerProgressLoading ? (
                   <div className="text-center text-muted-foreground">Loading career progress...</div>
                 ) : careerProgressError ? (
                   <div className="text-center text-destructive">{careerProgressError}</div>
                 ) : careerProgress.length === 0 ? (
-                  <div className="text-center text-muted-foreground">No career progress yet.</div>
+                  <div className="text-center text-muted-foreground">
+                    <p className="mb-4">No career progress yet.</p>
+                    <Button onClick={() => navigate('/browse-careers')} variant="outline">
+                      Start a Career Path
+                    </Button>
+                  </div>
                 ) : (
                   <div className="grid gap-6">
                     {careerProgress.map((career, index) => (
@@ -575,6 +757,20 @@ const Profile = () => {
                             className="mt-1"
                           />
                         </div>
+                        <div>
+                          <label className="text-sm font-medium text-muted-foreground">Re-type New Password</label>
+                          <Input
+                            type={showConfirmNewPassword ? 'text' : 'password'}
+                            value={confirmNewPassword}
+                            onChange={e => { setConfirmNewPassword(e.target.value); setPasswordError(''); }}
+                            required
+                            className="mt-1"
+                          />
+                          <Button type="button" size="sm" variant="ghost" onClick={() => setShowConfirmNewPassword(v => !v)}>
+                            {showConfirmNewPassword ? 'Hide' : 'Show'}
+                          </Button>
+                          {passwordError && <div className="text-red-500 text-xs mt-1">{passwordError}</div>}
+                        </div>
                         <Button type="submit" disabled={isChangingPassword} className="w-full">
                           {isChangingPassword ? 'Changing...' : 'Change Password'}
                         </Button>
@@ -586,15 +782,25 @@ const Profile = () => {
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-sm">Email notifications</span>
-                          <Button size="sm" variant="outline">Toggle</Button>
+                          <Button 
+                            size="sm" 
+                            variant={notificationSettings.email ? 'success' : 'outline'} 
+                            onClick={() => updateNotificationSettings({ email: !notificationSettings.email, achievement: notificationSettings.achievement })}
+                            disabled={notificationLoading}
+                          >
+                            {notificationLoading ? 'Updating...' : notificationSettings.email ? 'On' : 'Off'}
+                          </Button>
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-sm">Achievement alerts</span>
-                          <Button size="sm" variant="outline">Toggle</Button>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm">Weekly progress reports</span>
-                          <Button size="sm" variant="outline">Toggle</Button>
+                          <Button 
+                            size="sm" 
+                            variant={notificationSettings.achievement ? 'success' : 'outline'} 
+                            onClick={() => updateNotificationSettings({ email: notificationSettings.email, achievement: !notificationSettings.achievement })}
+                            disabled={notificationLoading}
+                          >
+                            {notificationLoading ? 'Updating...' : notificationSettings.achievement ? 'On' : 'Off'}
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -614,7 +820,7 @@ const Profile = () => {
                     </div>
 
                     <div className="pt-6 border-t border-border/50">
-                      <Button variant="destructive" size="sm">
+                      <Button type="button" variant="destructive" onClick={handleDeleteAccount}>
                         Delete Account
                       </Button>
                     </div>

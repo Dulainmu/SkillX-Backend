@@ -17,12 +17,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  phone: {
-    type: String
-  },
-  location: {
-    type: String
-  },
   joinDate: {
     type: String
   },
@@ -34,7 +28,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'mentor', 'admin'],
+    enum: ['user', 'mentor', 'admin', 'student'],
     default: 'user'
   },
   totalXp: {
@@ -46,6 +40,16 @@ const userSchema = new mongoose.Schema({
     default: 1
   },
   achievements: [{ type: String }], // Array of achievement keys
+  notificationSettings: {
+    email: {
+      type: Boolean,
+      default: true
+    },
+    achievement: {
+      type: Boolean,
+      default: true
+    }
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema); 

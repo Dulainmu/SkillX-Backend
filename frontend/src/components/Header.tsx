@@ -16,7 +16,7 @@ export const Header = () => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { hasStartedCareer } = useCareer();
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [user, setUser] = useState<{ name: string; email: string; avatar?: string } | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const Header = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          setUser({ name: data.name, email: data.email });
+          setUser({ name: data.name, email: data.email, avatar: data.avatar });
         }
       } catch (error) {
         // Optionally handle error
@@ -89,9 +89,9 @@ export const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-muted/50">
                   <Avatar className="h-9 w-9">
-                    <AvatarImage src="/placeholder-avatar.jpg" alt="Profile" />
+                    <AvatarImage src={user?.avatar || "/placeholder-avatar.jpg"} alt="Profile" />
                     <AvatarFallback className="bg-gradient-to-r from-primary to-secondary text-white text-sm">
-                      AJ
+                      {user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'U'}
                     </AvatarFallback>
                   </Avatar>
                 </Button>

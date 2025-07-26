@@ -4,16 +4,28 @@ const jwt = require('jsonwebtoken');
 const UserCareerProgress = require('../models/UserCareerProgress');
 const ProjectSubmission = require('../models/ProjectSubmission');
 const QuizResult = require('../models/QuizResult');
+const PasswordReset = require('../models/PasswordReset');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const Achievement = require('../models/Achievement');
 
 // Register a new user
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, phone, location, bio } = req.body;
+    const { name, email, password, bio } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required.' });
+    }
+    // Name validation: only letters, spaces, hyphens, apostrophes
+    if (!/^[A-Za-z\s'-]+$/.test(name)) {
+      return res.status(400).json({ message: 'Name can only contain letters, spaces, hyphens, and apostrophes.' });
+    }
+    // Email validation: not only-numeric before @
+    const [local] = email.split('@');
+    if (/^\d+$/.test(local)) {
+      return res.status(400).json({ message: 'Email cannot have only numbers before @.' });
     }
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -24,9 +36,11 @@ exports.register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      phone,
-      location,
-      joinDate: new Date().toLocaleString(),
+      joinDate: new Date().toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      }),
       bio
     });
     await user.save();
@@ -100,13 +114,77 @@ exports.getProfile = async (req, res) => {
   }
 };
 
+// Helper to award an achievement if not already earned
+async function awardAchievement(userId, achievementKey) {
+  const user = await User.findById(userId);
+  if (!user) return;
+  
+  if (!user.achievements.includes(achievementKey)) {
+    user.achievements.push(achievementKey);
+    await user.save();
+    
+    // Check if achievement notifications are enabled
+    if (user.notificationSettings && user.notificationSettings.achievement) {
+      // Send achievement notification (you can implement email notification here)
+      console.log(`Achievement earned: ${achievementKey} for user ${user.email}`);
+      
+      // Optional: Send email notification if email notifications are also enabled
+      if (user.notificationSettings.email) {
+        try {
+          const achievement = await Achievement.findOne({ key: achievementKey });
+          if (achievement) {
+            // Send email notification
+            const transporter = nodemailer.createTransport({
+              service: 'gmail',
+              auth: {
+                user: process.env.EMAIL_USER || 'your-email@gmail.com',
+                pass: process.env.EMAIL_PASS || 'your-app-password'
+              }
+            });
+
+            const mailOptions = {
+              from: process.env.EMAIL_USER || 'your-email@gmail.com',
+              to: user.email,
+              subject: `🎉 Achievement Unlocked: ${achievement.title} - SkillX`,
+              html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                  <h2 style="color: #3b82f6;">🎉 Achievement Unlocked!</h2>
+                  <p>Congratulations ${user.name}!</p>
+                  <p>You've earned the <strong>${achievement.title}</strong> achievement!</p>
+                  <p><em>${achievement.description}</em></p>
+                  <div style="text-align: center; margin: 30px 0;">
+                    <div style="background-color: #fbbf24; color: white; padding: 20px; border-radius: 10px; display: inline-block;">
+                      <h3 style="margin: 0;">🏆 ${achievement.title}</h3>
+                    </div>
+                  </div>
+                  <p>Keep up the great work and continue your learning journey!</p>
+                  <p>Best regards,<br>The SkillX Team</p>
+                </div>
+              `
+            };
+
+            await transporter.sendMail(mailOptions);
+            console.log(`Achievement email sent to ${user.email}`);
+          }
+        } catch (error) {
+          console.error('Failed to send achievement email:', error);
+        }
+      }
+    }
+  }
+}
+
 // Update user profile (protected)
 exports.updateProfile = async (req, res) => {
   try {
-    const updates = (({ name, phone, location, bio, avatar }) => ({ name, phone, location, bio, avatar }))(req.body);
+    const updates = (({ name, bio, avatar, level }) => ({ name, bio, avatar, level }))(req.body);
     const user = await User.findByIdAndUpdate(req.user.id, updates, { new: true, runValidators: true }).select('-password');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+    // Award 'Expert Level' achievement if user reaches level 15
+    if (user.level >= 15) {
+      await awardAchievement(user._id, 'expert_level');
     }
     res.status(200).json(user);
   } catch (err) {
@@ -155,6 +233,21 @@ exports.changePassword = async (req, res) => {
   }
 };
 
+// Delete user account (protected)
+exports.deleteAccount = async (req, res) => {
+  try {
+    // Delete all progress, submissions, and quiz results
+    await UserCareerProgress.deleteMany({ user: req.user.id });
+    await ProjectSubmission.deleteMany({ user: req.user.id });
+    await QuizResult.deleteMany({ user: req.user.id });
+    // Delete the user
+    await User.findByIdAndDelete(req.user.id);
+    res.status(200).json({ message: 'Account deleted successfully.' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
 // Get all achievements
 exports.getAllAchievements = async (req, res) => {
   try {
@@ -190,6 +283,155 @@ exports.earnAchievement = async (req, res) => {
       await user.save();
     }
     res.status(200).json({ message: 'Achievement earned', key });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+}; 
+
+// Forgot password - send reset email
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Don't reveal if email exists or not for security
+      return res.status(200).json({ message: 'If this email is registered, a password reset link has been sent.' });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    // Save reset token to database
+    await PasswordReset.create({
+      email: user.email,
+      token: resetTokenHash,
+      expiresAt: new Date(Date.now() + 3600000) // 1 hour
+    });
+
+    // Create email transporter (using Gmail for demo)
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER || 'your-email@gmail.com',
+        pass: process.env.EMAIL_PASS || 'your-app-password'
+      }
+    });
+
+    // Create reset URL
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:8080'}/reset-password?token=${resetToken}&email=${encodeURIComponent(user.email)}`;
+
+    // Email content
+    const mailOptions = {
+      from: process.env.EMAIL_USER || 'your-email@gmail.com',
+      to: user.email,
+      subject: 'Password Reset Request - SkillX',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #3b82f6;">Password Reset Request</h2>
+          <p>Hello ${user.name},</p>
+          <p>You requested a password reset for your SkillX account.</p>
+          <p>Click the button below to reset your password:</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetUrl}" style="background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Reset Password</a>
+          </div>
+          <p>This link will expire in 1 hour.</p>
+          <p>If you didn't request this password reset, please ignore this email.</p>
+          <p>Best regards,<br>The SkillX Team</p>
+        </div>
+      `
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'If this email is registered, a password reset link has been sent.' });
+  } catch (err) {
+    console.error('Password reset error:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+// Reset password with token
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token, email, newPassword } = req.body;
+    console.log('Reset password request:', { email, hasToken: !!token, hasPassword: !!newPassword });
+    
+    if (!token || !email || !newPassword) {
+      return res.status(400).json({ message: 'Token, email, and new password are required.' });
+    }
+
+    // Hash the token to compare with stored hash
+    const resetTokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    console.log('Looking for reset token with hash:', resetTokenHash.substring(0, 10) + '...');
+
+    // Find the reset token
+    const passwordReset = await PasswordReset.findOne({
+      email: email,
+      token: resetTokenHash,
+      expiresAt: { $gt: Date.now() }
+    });
+
+    if (!passwordReset) {
+      console.log('No valid reset token found for email:', email);
+      return res.status(400).json({ message: 'Invalid or expired reset token.' });
+    }
+
+    console.log('Valid reset token found, updating password for user:', email);
+
+    // Find the user
+    const user = await User.findOne({ email });
+    if (!user) {
+      console.log('User not found for email:', email);
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    // Delete the used reset token
+    await PasswordReset.deleteOne({ _id: passwordReset._id });
+
+    console.log('Password reset successful for user:', email);
+    res.status(200).json({ message: 'Password reset successfully.' });
+  } catch (err) {
+    console.error('Password reset error:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+}; 
+
+// Update notification settings (protected)
+exports.updateNotificationSettings = async (req, res) => {
+  try {
+    const { email, achievement } = req.body;
+    
+    if (typeof email !== 'boolean' || typeof achievement !== 'boolean') {
+      return res.status(400).json({ message: 'Email and achievement must be boolean values.' });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    user.notificationSettings = {
+      email,
+      achievement
+    };
+
+    await user.save();
+
+    res.status(200).json({ 
+      message: 'Notification settings updated successfully.',
+      notificationSettings: user.notificationSettings
+    });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
