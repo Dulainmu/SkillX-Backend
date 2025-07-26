@@ -6,5 +6,9 @@ const authMiddleware = require('../middlewares/authMiddleware');
 // Get recommendations for the user
 router.get('/', authMiddleware, recommendationsController.getRecommendations);
 router.get('/careers', recommendationsController.getAllCareers);
+// Get all careers with match scores for authenticated users
+router.get('/careers-with-scores', authMiddleware, recommendationsController.getAllCareersWithScores);
+// Debug endpoint to check quiz results and calculations
+router.get('/debug', authMiddleware, recommendationsController.debugQuizResults);
 
 module.exports = router; 
