@@ -14,6 +14,7 @@ const allowedOrigins = [
   'http://localhost:3000', // Alternative local port
   'http://localhost:5173', // Vite default port
   'https://skill-x-frontend.vercel.app', // Production frontend URL
+  'https://skill-x-frontend-o0i6xhbpv-dulainmus-projects.vercel.app', // Current Vercel deployment URL
   process.env.FRONTEND_URL, // Additional frontend URL from env
 ].filter(Boolean); // Remove undefined values
 
@@ -22,9 +23,15 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
+    // Allow all Vercel domains
+    if (origin.includes('vercel.app') || origin.includes('localhost')) {
+      return callback(null, true);
+    }
+    
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log('CORS blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
