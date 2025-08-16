@@ -216,6 +216,7 @@ function scoreCareerRole(careerRole, user, ctx = {}) {
         averageSalary: careerRole.averageSalary,
         jobGrowth: careerRole.jobGrowth,
         skills: careerRole.requiredSkills?.map(rs => rs.skillName) || [],
+        requiredSkills: careerRole.requiredSkills || [], // Include the full requiredSkills array
         roadmap: careerRole.roadmap || [],
         detailedRoadmap: careerRole.detailedRoadmap || [],
         skillFit: clamp01(skillFit),

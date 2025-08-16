@@ -92,6 +92,7 @@ exports.getRecommendations = async (req, res) => {
         detailedRoadmap: match.detailedRoadmap || [],
         averageSalary: match.averageSalary,
         jobGrowth: match.jobGrowth,
+        requiredSkills: match.requiredSkills || [], // Include required skills
         source: 'database'
       };
     }));
@@ -180,6 +181,7 @@ exports.getAllCareersWithScores = async (req, res) => {
       detailedRoadmap: match.detailedRoadmap || [],
       averageSalary: match.averageSalary,
       jobGrowth: match.jobGrowth,
+      requiredSkills: match.requiredSkills || [], // Include required skills
       source: 'database'
     }));
     
