@@ -1,0 +1,747 @@
+
+[
+  {
+    "id": "frontend-dev",
+    "name": "Frontend Developer",
+    "description": "Builds modern web interfaces with a focus on UX and accessibility.",
+    "industry": "Technology",
+    "averageSalary": "$70k–$120k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.30, "I": 0.60, "A": 0.70, "S": 0.40, "E": 0.35, "C": 0.40 },
+    "desiredBigFive": { "Openness": 0.70, "Conscientiousness": 0.70, "Extraversion": 0.50, "Agreeableness": 0.60, "Neuroticism": 0.30 },
+    "workValues": ["Achievement", "Independence", "Recognition", "Working Conditions", "Relationships"],
+    "roles": [
+      { "title": "Junior Frontend Developer", "level": "entry",
+        "requiredSkills": { "HTML": 2, "CSS": 2, "JavaScript": 2 },
+        "niceToHave": { "React": 1, "TypeScript": 1, "UI": 1 },
+        "personalityTraits": ["detailOriented", "creative"],
+        "learningStyleFit": ["visual", "handsOn", "reading"]
+      },
+      { "title": "Frontend Developer", "level": "mid",
+        "requiredSkills": { "HTML": 3, "CSS": 3, "JavaScript": 3, "React": 2, "TypeScript": 2 },
+        "niceToHave": { "Accessibility": 2, "Testing": 2 },
+        "personalityTraits": ["creative", "teamPlayer"],
+        "learningStyleFit": ["visual", "handsOn"]
+      },
+      { "title": "Senior Frontend Developer", "level": "advanced",
+        "requiredSkills": { "HTML": 4, "CSS": 4, "JavaScript": 4, "React": 3, "TypeScript": 3, "Performance": 3 },
+        "niceToHave": { "DesignSystems": 3, "Architecture": 2 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["visual", "handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "backend-dev",
+    "name": "Backend Developer",
+    "description": "Designs and builds server-side systems, APIs, and databases.",
+    "industry": "Technology",
+    "averageSalary": "$80k–$140k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.40, "I": 0.70, "A": 0.20, "S": 0.30, "E": 0.30, "C": 0.60 },
+    "desiredBigFive": { "Openness": 0.50, "Conscientiousness": 0.80, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.30 },
+    "workValues": ["Achievement", "Independence", "Working Conditions", "Support"],
+    "roles": [
+      { "title": "Junior Backend Developer", "level": "entry",
+        "requiredSkills": { "Node.js": 2, "SQL": 2, "APIs": 2 },
+        "niceToHave": { "Python": 1, "Linux": 1 },
+        "personalityTraits": ["analytical", "structured"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "Backend Developer", "level": "mid",
+        "requiredSkills": { "Node.js": 3, "SQL": 3, "APIs": 3, "Architecture": 2, "Testing": 2 },
+        "niceToHave": { "Python": 2, "Caching": 2, "NoSQL": 2 },
+        "personalityTraits": ["problemSolving", "teamPlayer"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "Senior Backend Developer", "level": "advanced",
+        "requiredSkills": { "Node.js": 4, "SQL": 4, "APIs": 4, "Architecture": 3, "DistributedSystems": 3, "Security": 3 },
+        "niceToHave": { "Java": 3, "Go": 2, "Observability": 3 },
+        "personalityTraits": ["leadership", "systemsThinking"],
+        "learningStyleFit": ["handsOn", "reading"]
+      }
+    ]
+  },
+  {
+    "id": "fullstack-dev",
+    "name": "Full-Stack Developer",
+    "description": "Builds both client and server features end-to-end.",
+    "industry": "Technology",
+    "averageSalary": "$85k–$150k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.45, "I": 0.65, "A": 0.55, "S": 0.40, "E": 0.35, "C": 0.50 },
+    "desiredBigFive": { "Openness": 0.60, "Conscientiousness": 0.75, "Extraversion": 0.50, "Agreeableness": 0.50, "Neuroticism": 0.35 },
+    "workValues": ["Achievement", "Independence", "Working Conditions", "Recognition"],
+    "roles": [
+      { "title": "Junior Full-Stack Developer", "level": "entry",
+        "requiredSkills": { "JavaScript": 2, "HTML": 2, "CSS": 2, "Node.js": 2, "SQL": 1 },
+        "niceToHave": { "React": 1, "Git": 2 },
+        "personalityTraits": ["adaptable", "curious"],
+        "learningStyleFit": ["handsOn", "visual"]
+      },
+      { "title": "Full-Stack Developer", "level": "mid",
+        "requiredSkills": { "React": 3, "TypeScript": 2, "Node.js": 3, "SQL": 3, "APIs": 3 },
+        "niceToHave": { "Testing": 2, "CI/CD": 2 },
+        "personalityTraits": ["problemSolving", "ownership"],
+        "learningStyleFit": ["handsOn", "visual"]
+      },
+      { "title": "Senior Full-Stack Developer", "level": "advanced",
+        "requiredSkills": { "React": 4, "TypeScript": 3, "Node.js": 4, "SQL": 4, "Architecture": 3, "Security": 3 },
+        "niceToHave": { "Cloud": 2, "DevOps": 2 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["handsOn", "visual"]
+      }
+    ]
+  },
+  {
+    "id": "devops-engineer",
+    "name": "DevOps Engineer",
+    "description": "Automates software delivery and infrastructure with reliability and scale.",
+    "industry": "Technology",
+    "averageSalary": "$90k–$150k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.60, "I": 0.60, "A": 0.25, "S": 0.35, "E": 0.35, "C": 0.60 },
+    "desiredBigFive": { "Openness": 0.50, "Conscientiousness": 0.80, "Extraversion": 0.50, "Agreeableness": 0.50, "Neuroticism": 0.30 },
+    "workValues": ["Working Conditions", "Support", "Achievement", "Independence"],
+    "roles": [
+      { "title": "DevOps Intern / Junior", "level": "entry",
+        "requiredSkills": { "Linux": 2, "Git": 2, "CI/CD": 2, "Cloud": 1 },
+        "niceToHave": { "Docker": 2, "Scripting": 2 },
+        "personalityTraits": ["structured", "reliable"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "DevOps Engineer", "level": "mid",
+        "requiredSkills": { "Linux": 3, "CI/CD": 3, "Docker": 3, "Cloud": 3, "Terraform": 2, "Monitoring": 2 },
+        "niceToHave": { "Kubernetes": 2, "Networking": 2 },
+        "personalityTraits": ["systemsThinking", "collaborative"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Senior DevOps / Platform Engineer", "level": "advanced",
+        "requiredSkills": { "Linux": 4, "CI/CD": 4, "Docker": 4, "Kubernetes": 3, "Cloud": 4, "Terraform": 3, "Security": 3 },
+        "niceToHave": { "SRE": 3 },
+        "personalityTraits": ["leadership", "resilience"],
+        "learningStyleFit": ["handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "sre",
+    "name": "Site Reliability Engineer (SRE)",
+    "description": "Applies software engineering to reliability—SLIs/SLOs, incident response, scaling.",
+    "industry": "Technology",
+    "averageSalary": "$100k–$170k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.60, "I": 0.70, "A": 0.20, "S": 0.30, "E": 0.30, "C": 0.60 },
+    "desiredBigFive": { "Openness": 0.50, "Conscientiousness": 0.85, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.20 },
+    "workValues": ["Working Conditions", "Support", "Achievement", "Independence"],
+    "roles": [
+      { "title": "Junior SRE", "level": "entry",
+        "requiredSkills": { "Linux": 2, "Monitoring": 2, "Scripting": 2, "Cloud": 2 },
+        "niceToHave": { "Networking": 2 },
+        "personalityTraits": ["calmUnderPressure", "analytical"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "SRE", "level": "mid",
+        "requiredSkills": { "Observability": 3, "IncidentResponse": 3, "Kubernetes": 2, "Automation": 3, "Cloud": 3 },
+        "niceToHave": { "CapacityPlanning": 2 },
+        "personalityTraits": ["ownership", "teamPlayer"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Senior SRE", "level": "advanced",
+        "requiredSkills": { "Kubernetes": 3, "Cloud": 4, "ChaosEngineering": 2, "Security": 3, "Architecture": 3 },
+        "niceToHave": { "Programming": 3 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "cloud-engineer",
+    "name": "Cloud Engineer",
+    "description": "Designs, builds, and operates workloads on AWS/Azure/GCP.",
+    "industry": "Technology",
+    "averageSalary": "$95k–$160k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.60, "I": 0.60, "A": 0.20, "S": 0.30, "E": 0.35, "C": 0.50 },
+    "desiredBigFive": { "Openness": 0.50, "Conscientiousness": 0.80, "Extraversion": 0.45, "Agreeableness": 0.50, "Neuroticism": 0.30 },
+    "workValues": ["Working Conditions", "Achievement", "Independence", "Recognition"],
+    "roles": [
+      { "title": "Cloud Intern / Junior", "level": "entry",
+        "requiredSkills": { "Cloud": 2, "Linux": 2, "Networking": 2 },
+        "niceToHave": { "Scripting": 2, "IAM": 2 },
+        "personalityTraits": ["analytical", "structured"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "Cloud Engineer", "level": "mid",
+        "requiredSkills": { "Cloud": 3, "Terraform": 2, "Networking": 3, "Security": 2, "Automation": 3 },
+        "niceToHave": { "Kubernetes": 2 },
+        "personalityTraits": ["problemSolving", "ownership"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Senior Cloud Architect", "level": "advanced",
+        "requiredSkills": { "Cloud": 4, "Architecture": 3, "Security": 3, "Networking": 4, "CostOptimization": 3 },
+        "niceToHave": { "MultiCloud": 2 },
+        "personalityTraits": ["leadership", "systemsThinking"],
+        "learningStyleFit": ["handsOn", "reading"]
+      }
+    ]
+  },
+  {
+    "id": "data-analyst",
+    "name": "Data Analyst",
+    "description": "Turns raw data into insights and stories.",
+    "industry": "Technology",
+    "averageSalary": "$65k–$115k",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.30, "I": 0.70, "A": 0.20, "S": 0.35, "E": 0.30, "C": 0.60 },
+    "desiredBigFive": { "Openness": 0.55, "Conscientiousness": 0.75, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.30 },
+    "workValues": ["Achievement", "Independence", "Working Conditions"],
+    "roles": [
+      { "title": "Junior Data Analyst", "level": "entry",
+        "requiredSkills": { "Excel": 2, "SQL": 2, "DataViz": 2 },
+        "niceToHave": { "Python": 1, "Statistics": 1 },
+        "personalityTraits": ["analytical", "detailOriented"],
+        "learningStyleFit": ["visual", "reading"]
+      },
+      { "title": "Data Analyst", "level": "mid",
+        "requiredSkills": { "SQL": 3, "Python": 2, "DataViz": 3, "Statistics": 2, "Dashboards": 2 },
+        "niceToHave": { "PowerBI": 2, "Tableau": 2 },
+        "personalityTraits": ["problemSolving", "communication"],
+        "learningStyleFit": ["visual", "handsOn"]
+      },
+      { "title": "Senior Data Analyst / Analytics Engineer", "level": "advanced",
+        "requiredSkills": { "SQL": 4, "Python": 3, "DataViz": 4, "Statistics": 3, "Modeling": 3, "DBT": 2 },
+        "niceToHave": { "CloudData": 2 },
+        "personalityTraits": ["mentorship", "businessAcumen"],
+        "learningStyleFit": ["visual", "handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "data-scientist",
+    "name": "Data Scientist",
+    "description": "Builds models to predict outcomes and inform decisions.",
+    "industry": "Technology",
+    "averageSalary": "$95k–$160k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.30, "I": 0.80, "A": 0.30, "S": 0.30, "E": 0.30, "C": 0.50 },
+    "desiredBigFive": { "Openness": 0.80, "Conscientiousness": 0.70, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.30 },
+    "workValues": ["Achievement", "Independence", "Recognition"],
+    "roles": [
+      { "title": "Associate Data Scientist", "level": "entry",
+        "requiredSkills": { "Python": 2, "Statistics": 2, "SQL": 2, "DataViz": 2 },
+        "niceToHave": { "ML": 1 },
+        "personalityTraits": ["curious", "analytical"],
+        "learningStyleFit": ["reading", "handsOn"]
+      },
+      { "title": "Data Scientist", "level": "mid",
+        "requiredSkills": { "Python": 3, "ML": 3, "SQL": 3, "Statistics": 3, "Experimentation": 2 },
+        "niceToHave": { "MLOps": 2 },
+        "personalityTraits": ["problemSolving", "communication"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "Senior Data Scientist", "level": "advanced",
+        "requiredSkills": { "ML": 4, "Python": 4, "Statistics": 4, "DeepLearning": 3, "MLOps": 3 },
+        "niceToHave": { "Leadership": 2 },
+        "personalityTraits": ["mentorship", "businessImpact"],
+        "learningStyleFit": ["handsOn", "reading"]
+      }
+    ]
+  },
+  {
+    "id": "ml-engineer",
+    "name": "ML Engineer",
+    "description": "Productionizes ML: data pipelines, model serving, monitoring.",
+    "industry": "Technology",
+    "averageSalary": "$110k–$180k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.40, "I": 0.70, "A": 0.35, "S": 0.30, "E": 0.35, "C": 0.55 },
+    "desiredBigFive": { "Openness": 0.70, "Conscientiousness": 0.80, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.30 },
+    "workValues": ["Achievement", "Independence", "Working Conditions"],
+    "roles": [
+      { "title": "Junior ML Engineer", "level": "entry",
+        "requiredSkills": { "Python": 3, "SQL": 2, "ML": 2, "APIs": 2 },
+        "niceToHave": { "Cloud": 2, "Docker": 2 },
+        "personalityTraits": ["analytical", "builderMindset"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "ML Engineer", "level": "mid",
+        "requiredSkills": { "ML": 3, "Python": 4, "MLOps": 3, "Cloud": 3, "DataPipelines": 3 },
+        "niceToHave": { "Kubernetes": 2 },
+        "personalityTraits": ["systemsThinking", "ownership"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Senior ML Engineer", "level": "advanced",
+        "requiredSkills": { "ML": 4, "MLOps": 4, "Cloud": 4, "Architecture": 3, "Observability": 3 },
+        "niceToHave": { "Security": 2 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "cyber-analyst",
+    "name": "Cybersecurity Analyst",
+    "description": "Monitors, detects, and responds to threats across systems and networks.",
+    "industry": "Technology",
+    "averageSalary": "$85k–$140k+",
+    "jobGrowth": "Very High",
+    "desiredRIASEC": { "R": 0.60, "I": 0.70, "A": 0.20, "S": 0.30, "E": 0.30, "C": 0.60 },
+    "desiredBigFive": { "Openness": 0.50, "Conscientiousness": 0.80, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.25 },
+    "workValues": ["Working Conditions", "Achievement", "Support", "Recognition"],
+    "roles": [
+      { "title": "Security Analyst (Tier 1)", "level": "entry",
+        "requiredSkills": { "Networking": 2, "Linux": 2, "SIEM": 2, "Scripting": 1 },
+        "niceToHave": { "Security": 2 },
+        "personalityTraits": ["detailOriented", "calmUnderPressure"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "Security Analyst (Tier 2/3)", "level": "mid",
+        "requiredSkills": { "Security": 3, "ThreatHunting": 2, "SIEM": 3, "IR": 3, "CloudSecurity": 2 },
+        "niceToHave": { "Automation": 2 },
+        "personalityTraits": ["analytical", "problemSolving"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Senior Security Analyst / Blue Team Lead", "level": "advanced",
+        "requiredSkills": { "Security": 4, "IR": 4, "ThreatIntel": 3, "CloudSecurity": 3, "Architecture": 2 },
+        "niceToHave": { "PurpleTeam": 2 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "pentester",
+    "name": "Penetration Tester",
+    "description": "Ethically breaks systems to find vulnerabilities before attackers do.",
+    "industry": "Technology",
+    "averageSalary": "$90k–$155k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.50, "I": 0.70, "A": 0.25, "S": 0.30, "E": 0.30, "C": 0.50 },
+    "desiredBigFive": { "Openness": 0.70, "Conscientiousness": 0.60, "Extraversion": 0.45, "Agreeableness": 0.40, "Neuroticism": 0.30 },
+    "workValues": ["Independence", "Achievement", "Recognition"],
+    "roles": [
+      { "title": "Associate Pentester", "level": "entry",
+        "requiredSkills": { "Networking": 2, "Linux": 2, "Scripting": 2, "VulnAssessment": 2 },
+        "niceToHave": { "WebSecurity": 2 },
+        "personalityTraits": ["curious", "persistent"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Penetration Tester", "level": "mid",
+        "requiredSkills": { "Exploitation": 3, "WebSecurity": 3, "ADSecurity": 2, "Reporting": 2 },
+        "niceToHave": { "CloudSecurity": 2 },
+        "personalityTraits": ["problemSolving", "communication"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "Senior Pentester / Red Team", "level": "advanced",
+        "requiredSkills": { "Exploitation": 4, "RedTeamOps": 3, "Evasion": 3, "CloudSecurity": 3, "Reporting": 3 },
+        "niceToHave": { "ToolingDev": 2 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "network-engineer",
+    "name": "Network Engineer",
+    "description": "Designs and operates enterprise networks (LAN/WAN/SD-WAN).",
+    "industry": "Technology",
+    "averageSalary": "$75k–$130k+",
+    "jobGrowth": "Medium",
+    "desiredRIASEC": { "R": 0.70, "I": 0.60, "A": 0.20, "S": 0.30, "E": 0.30, "C": 0.50 },
+    "desiredBigFive": { "Openness": 0.45, "Conscientiousness": 0.80, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.30 },
+    "workValues": ["Working Conditions", "Support", "Achievement"],
+    "roles": [
+      { "title": "Network Technician", "level": "entry",
+        "requiredSkills": { "Networking": 2, "Linux": 1, "Scripting": 1 },
+        "niceToHave": { "Monitoring": 1 },
+        "personalityTraits": ["structured", "reliable"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Network Engineer", "level": "mid",
+        "requiredSkills": { "Networking": 3, "RoutingSwitching": 3, "Firewalls": 2, "Automation": 2 },
+        "niceToHave": { "CloudNetworking": 2 },
+        "personalityTraits": ["problemSolving", "ownership"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Senior Network Engineer", "level": "advanced",
+        "requiredSkills": { "Networking": 4, "Architecture": 3, "Security": 3, "Automation": 3 },
+        "niceToHave": { "SDWAN": 2 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "dba",
+    "name": "Database Administrator",
+    "description": "Installs, configures, and tunes databases; ensures integrity and availability.",
+    "industry": "Technology",
+    "averageSalary": "$80k–$135k+",
+    "jobGrowth": "Medium",
+    "desiredRIASEC": { "R": 0.30, "I": 0.60, "A": 0.20, "S": 0.30, "E": 0.25, "C": 0.70 },
+    "desiredBigFive": { "Openness": 0.40, "Conscientiousness": 0.85, "Extraversion": 0.35, "Agreeableness": 0.45, "Neuroticism": 0.30 },
+    "workValues": ["Working Conditions", "Achievement", "Support"],
+    "roles": [
+      { "title": "Junior DBA", "level": "entry",
+        "requiredSkills": { "SQL": 2, "BackupRecovery": 2, "Linux": 1 },
+        "niceToHave": { "NoSQL": 1 },
+        "personalityTraits": ["detailOriented", "structured"],
+        "learningStyleFit": ["reading", "handsOn"]
+      },
+      { "title": "Database Administrator", "level": "mid",
+        "requiredSkills": { "SQL": 3, "PerformanceTuning": 3, "BackupRecovery": 3, "Security": 2 },
+        "niceToHave": { "Automation": 2, "CloudData": 2 },
+        "personalityTraits": ["problemSolving", "reliability"],
+        "learningStyleFit": ["reading", "handsOn"]
+      },
+      { "title": "Senior DBA / Data Architect", "level": "advanced",
+        "requiredSkills": { "SQL": 4, "Architecture": 3, "Security": 3, "CloudData": 3, "NoSQL": 3 },
+        "niceToHave": { "Governance": 2 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["reading", "handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "qa",
+    "name": "QA Tester / QA Engineer",
+    "description": "Prevents defects via testing strategies and automation.",
+    "industry": "Technology",
+    "averageSalary": "$60k–$110k",
+    "jobGrowth": "Medium",
+    "desiredRIASEC": { "R": 0.30, "I": 0.60, "A": 0.20, "S": 0.35, "E": 0.30, "C": 0.70 },
+    "desiredBigFive": { "Openness": 0.45, "Conscientiousness": 0.85, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.30 },
+    "workValues": ["Working Conditions", "Achievement", "Support"],
+    "roles": [
+      { "title": "QA Tester", "level": "entry",
+        "requiredSkills": { "Testing": 2, "TestCases": 2, "BugReporting": 2 },
+        "niceToHave": { "JavaScript": 1 },
+        "personalityTraits": ["detailOriented", "patient"],
+        "learningStyleFit": ["reading", "handsOn"]
+      },
+      { "title": "QA Automation Engineer", "level": "mid",
+        "requiredSkills": { "Automation": 3, "JavaScript": 2, "Selenium": 2, "API-Testing": 2 },
+        "niceToHave": { "Cypress": 2, "CI/CD": 2 },
+        "personalityTraits": ["analytical", "problemSolving"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Senior QA / Quality Lead", "level": "advanced",
+        "requiredSkills": { "Automation": 4, "Strategy": 3, "PerformanceTesting": 3, "SecurityTesting": 2 },
+        "niceToHave": { "Leadership": 2 },
+        "personalityTraits": ["mentorship", "ownership"],
+        "learningStyleFit": ["handsOn", "reading"]
+      }
+    ]
+  },
+  {
+    "id": "tech-support",
+    "name": "Technical Support Specialist",
+    "description": "Resolves end-user issues and supports IT systems.",
+    "industry": "Technology",
+    "averageSalary": "$45k–$75k",
+    "jobGrowth": "Medium",
+    "desiredRIASEC": { "R": 0.45, "I": 0.40, "A": 0.20, "S": 0.60, "E": 0.35, "C": 0.55 },
+    "desiredBigFive": { "Openness": 0.45, "Conscientiousness": 0.70, "Extraversion": 0.60, "Agreeableness": 0.70, "Neuroticism": 0.35 },
+    "workValues": ["Relationships", "Support", "Working Conditions", "Achievement"],
+    "roles": [
+      { "title": "Help Desk Technician", "level": "entry",
+        "requiredSkills": { "CustomerService": 2, "Troubleshooting": 2, "Windows": 2 },
+        "niceToHave": { "Networking": 1 },
+        "personalityTraits": ["empathetic", "clearCommunication"],
+        "learningStyleFit": ["handsOn", "auditory"]
+      },
+      { "title": "IT Support Specialist", "level": "mid",
+        "requiredSkills": { "Troubleshooting": 3, "Scripting": 2, "Networking": 2, "MacOS": 2 },
+        "niceToHave": { "MDM": 2, "Automation": 2 },
+        "personalityTraits": ["problemSolving", "patience"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Support Lead / Desktop Engineer", "level": "advanced",
+        "requiredSkills": { "Troubleshooting": 4, "Automation": 3, "SLA": 3, "Scripting": 3 },
+        "niceToHave": { "Security": 2 },
+        "personalityTraits": ["leadership", "serviceMindset"],
+        "learningStyleFit": ["handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "sysadmin",
+    "name": "Systems Administrator",
+    "description": "Maintains servers, operating systems, and services.",
+    "industry": "Technology",
+    "averageSalary": "$70k–$120k",
+    "jobGrowth": "Medium",
+    "desiredRIASEC": { "R": 0.60, "I": 0.50, "A": 0.20, "S": 0.30, "E": 0.30, "C": 0.60 },
+    "desiredBigFive": { "Openness": 0.45, "Conscientiousness": 0.80, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.30 },
+    "workValues": ["Working Conditions", "Support", "Achievement"],
+    "roles": [
+      { "title": "Junior Sysadmin", "level": "entry",
+        "requiredSkills": { "Windows": 2, "Linux": 2, "Networking": 2 },
+        "niceToHave": { "Scripting": 2 },
+        "personalityTraits": ["reliable", "structured"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Systems Administrator", "level": "mid",
+        "requiredSkills": { "Linux": 3, "Windows": 3, "Automation": 2, "Security": 2, "BackupRecovery": 2 },
+        "niceToHave": { "Virtualization": 2 },
+        "personalityTraits": ["ownership", "problemSolving"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Senior Systems Engineer", "level": "advanced",
+        "requiredSkills": { "Linux": 4, "Automation": 3, "Security": 3, "Architecture": 3, "Cloud": 3 },
+        "niceToHave": { "Observability": 2 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "ux-designer",
+    "name": "UX Designer",
+    "description": "Designs intuitive and accessible user experiences.",
+    "industry": "Design",
+    "averageSalary": "$75k–$130k",
+    "jobGrowth": "Medium",
+    "desiredRIASEC": { "R": 0.25, "I": 0.45, "A": 0.80, "S": 0.50, "E": 0.35, "C": 0.40 },
+    "desiredBigFive": { "Openness": 0.80, "Conscientiousness": 0.60, "Extraversion": 0.55, "Agreeableness": 0.70, "Neuroticism": 0.35 },
+    "workValues": ["Achievement", "Independence", "Recognition", "Relationships"],
+    "roles": [
+      { "title": "UX Design Intern", "level": "entry",
+        "requiredSkills": { "Figma": 2, "UserResearch": 2, "Prototyping": 2 },
+        "niceToHave": { "UI": 1 },
+        "personalityTraits": ["empathetic", "creative"],
+        "learningStyleFit": ["visual", "handsOn"]
+      },
+      { "title": "UX Designer", "level": "mid",
+        "requiredSkills": { "Figma": 3, "UserResearch": 3, "Prototyping": 3, "UI": 2, "Accessibility": 2 },
+        "niceToHave": { "DesignSystems": 2 },
+        "personalityTraits": ["communication", "problemSolving"],
+        "learningStyleFit": ["visual", "handsOn"]
+      },
+      { "title": "Senior UX Designer", "level": "advanced",
+        "requiredSkills": { "Figma": 4, "UserResearch": 4, "Prototyping": 4, "DesignSystems": 3, "Strategy": 2 },
+        "niceToHave": { "Leadership": 2 },
+        "personalityTraits": ["mentorship", "vision"],
+        "learningStyleFit": ["visual"]
+      }
+    ]
+  },
+  {
+    "id": "mobile-dev",
+    "name": "Mobile Developer",
+    "description": "Builds iOS/Android apps and mobile experiences.",
+    "industry": "Technology",
+    "averageSalary": "$85k–$150k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.40, "I": 0.60, "A": 0.50, "S": 0.35, "E": 0.35, "C": 0.50 },
+    "desiredBigFive": { "Openness": 0.60, "Conscientiousness": 0.75, "Extraversion": 0.45, "Agreeableness": 0.50, "Neuroticism": 0.35 },
+    "workValues": ["Achievement", "Independence", "Recognition"],
+    "roles": [
+      { "title": "Junior Mobile Developer", "level": "entry",
+        "requiredSkills": { "JavaScript": 2, "ReactNative": 2, "APIs": 2 },
+        "niceToHave": { "Flutter": 1, "iOS": 1, "Android": 1 },
+        "personalityTraits": ["creative", "detailOriented"],
+        "learningStyleFit": ["handsOn", "visual"]
+      },
+      { "title": "Mobile Developer", "level": "mid",
+        "requiredSkills": { "ReactNative": 3, "iOS": 2, "Android": 2, "Testing": 2, "Performance": 2 },
+        "niceToHave": { "TypeScript": 2 },
+        "personalityTraits": ["problemSolving", "UXFocus"],
+        "learningStyleFit": ["handsOn"]
+      },
+      { "title": "Senior Mobile Engineer", "level": "advanced",
+        "requiredSkills": { "iOS": 3, "Android": 3, "ReactNative": 4, "Architecture": 3, "Automation": 3 },
+        "niceToHave": { "ReleaseEngineering": 2 },
+        "personalityTraits": ["leadership", "mentorship"],
+        "learningStyleFit": ["handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "product-manager",
+    "name": "Product Manager (Tech)",
+    "description": "Defines product vision, roadmap, and outcomes with cross-functional teams.",
+    "industry": "Technology",
+    "averageSalary": "$100k–$170k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.30, "I": 0.50, "A": 0.45, "S": 0.55, "E": 0.60, "C": 0.50 },
+    "desiredBigFive": { "Openness": 0.60, "Conscientiousness": 0.80, "Extraversion": 0.65, "Agreeableness": 0.60, "Neuroticism": 0.30 },
+    "workValues": ["Recognition", "Achievement", "Relationships", "Independence"],
+    "roles": [
+      { "title": "Associate Product Manager", "level": "entry",
+        "requiredSkills": { "Communication": 3, "Analytics": 2, "Roadmapping": 2 },
+        "niceToHave": { "UX": 2, "SQL": 1 },
+        "personalityTraits": ["empathy", "ownership"],
+        "learningStyleFit": ["reading", "auditory"]
+      },
+      { "title": "Product Manager", "level": "mid",
+        "requiredSkills": { "Roadmapping": 3, "Analytics": 3, "StakeholderMgmt": 3, "Prioritization": 3 },
+        "niceToHave": { "Experimentation": 2 },
+        "personalityTraits": ["leadership", "communication"],
+        "learningStyleFit": ["reading", "auditory"]
+      },
+      { "title": "Senior Product Manager", "level": "advanced",
+        "requiredSkills": { "Strategy": 3, "Leadership": 3, "Analytics": 4, "Vision": 3 },
+        "niceToHave": { "Finance": 2 },
+        "personalityTraits": ["mentorship", "influence"],
+        "learningStyleFit": ["reading", "auditory"]
+      }
+    ]
+  },
+  {
+    "id": "project-manager-it",
+    "name": "IT Project Manager",
+    "description": "Delivers projects on scope, time, and budget using Agile/Waterfall.",
+    "industry": "Technology",
+    "averageSalary": "$85k–$140k",
+    "jobGrowth": "Medium",
+    "desiredRIASEC": { "R": 0.35, "I": 0.45, "A": 0.30, "S": 0.50, "E": 0.55, "C": 0.60 },
+    "desiredBigFive": { "Openness": 0.50, "Conscientiousness": 0.85, "Extraversion": 0.60, "Agreeableness": 0.55, "Neuroticism": 0.30 },
+    "workValues": ["Recognition", "Achievement", "Relationships", "Working Conditions"],
+    "roles": [
+      { "title": "Project Coordinator", "level": "entry",
+        "requiredSkills": { "Communication": 3, "Scheduling": 2, "RiskBasics": 2 },
+        "niceToHave": { "Jira": 2 },
+        "personalityTraits": ["organized", "teamPlayer"],
+        "learningStyleFit": ["reading", "auditory"]
+      },
+      { "title": "Project Manager", "level": "mid",
+        "requiredSkills": { "Agile": 3, "StakeholderMgmt": 3, "RiskMgmt": 3, "Budgeting": 2 },
+        "niceToHave": { "TechnicalFluency": 2 },
+        "personalityTraits": ["leadership", "communication"],
+        "learningStyleFit": ["reading", "auditory"]
+      },
+      { "title": "Senior Project Manager / Program Manager", "level": "advanced",
+        "requiredSkills": { "ProgramMgmt": 3, "Strategy": 3, "Negotiation": 3, "RiskMgmt": 4 },
+        "niceToHave": { "PeopleMgmt": 2 },
+        "personalityTraits": ["influence", "ownership"],
+        "learningStyleFit": ["reading", "auditory"]
+      }
+    ]
+  },
+  {
+    "id": "business-analyst",
+    "name": "Business Analyst",
+    "description": "Bridges business needs and technical solutions via requirements & analysis.",
+    "industry": "Technology",
+    "averageSalary": "$70k–$120k",
+    "jobGrowth": "Medium",
+    "desiredRIASEC": { "R": 0.30, "I": 0.60, "A": 0.30, "S": 0.50, "E": 0.40, "C": 0.60 },
+    "desiredBigFive": { "Openness": 0.50, "Conscientiousness": 0.80, "Extraversion": 0.50, "Agreeableness": 0.55, "Neuroticism": 0.35 },
+    "workValues": ["Achievement", "Relationships", "Independence"],
+    "roles": [
+      { "title": "Junior Business Analyst", "level": "entry",
+        "requiredSkills": { "Requirements": 2, "Communication": 3, "Excel": 2 },
+        "niceToHave": { "SQL": 1 },
+        "personalityTraits": ["analytical", "empathetic"],
+        "learningStyleFit": ["reading", "auditory"]
+      },
+      { "title": "Business Analyst", "level": "mid",
+        "requiredSkills": { "Requirements": 3, "SQL": 2, "Modeling": 2, "StakeholderMgmt": 3 },
+        "niceToHave": { "DataViz": 2 },
+        "personalityTraits": ["problemSolving", "communication"],
+        "learningStyleFit": ["reading", "visual"]
+      },
+      { "title": "Senior / Lead Business Analyst", "level": "advanced",
+        "requiredSkills": { "Strategy": 2, "Requirements": 4, "Analytics": 3, "Leadership": 2 },
+        "niceToHave": { "DomainKnowledge": 3 },
+        "personalityTraits": ["mentorship", "ownership"],
+        "learningStyleFit": ["reading", "visual"]
+      }
+    ]
+  },
+  {
+    "id": "software-developer",
+    "name": "Software Developer",
+    "description": "Designs and builds software applications and services.",
+    "industry": "Technology",
+    "averageSalary": "$90k–$155k+",
+    "jobGrowth": "Very High",
+    "desiredRIASEC": { "R": 0.40, "I": 0.70, "A": 0.35, "S": 0.35, "E": 0.30, "C": 0.50 },
+    "desiredBigFive": { "Openness": 0.60, "Conscientiousness": 0.75, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.35 },
+    "workValues": ["Achievement", "Independence", "Working Conditions"],
+    "roles": [
+      { "title": "Junior Software Developer", "level": "entry",
+        "requiredSkills": { "Programming": 2, "Git": 2, "Testing": 2 },
+        "niceToHave": { "DesignPatterns": 1 },
+        "personalityTraits": ["analytical", "curious"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "Software Developer", "level": "mid",
+        "requiredSkills": { "Programming": 3, "DesignPatterns": 2, "Testing": 3, "APIs": 3 },
+        "niceToHave": { "Security": 2 },
+        "personalityTraits": ["problemSolving", "teamPlayer"],
+        "learningStyleFit": ["handsOn", "reading"]
+      },
+      { "title": "Senior Software Engineer", "level": "advanced",
+        "requiredSkills": { "Programming": 4, "Architecture": 3, "Performance": 3, "Security": 3 },
+        "niceToHave": { "Leadership": 2 },
+        "personalityTraits": ["mentorship", "ownership"],
+        "learningStyleFit": ["handsOn", "reading"]
+      }
+    ]
+  },
+  {
+    "id": "security-architect",
+    "name": "Security Architect",
+    "description": "Designs security architecture and controls for complex systems.",
+    "industry": "Technology",
+    "averageSalary": "$120k–$190k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.40, "I": 0.65, "A": 0.25, "S": 0.35, "E": 0.40, "C": 0.60 },
+    "desiredBigFive": { "Openness": 0.60, "Conscientiousness": 0.85, "Extraversion": 0.50, "Agreeableness": 0.50, "Neuroticism": 0.25 },
+    "workValues": ["Recognition", "Achievement", "Working Conditions", "Independence"],
+    "roles": [
+      { "title": "Associate Security Engineer", "level": "entry",
+        "requiredSkills": { "Security": 2, "Networking": 2, "Linux": 2 },
+        "niceToHave": { "CloudSecurity": 1 },
+        "personalityTraits": ["analytical", "riskAware"],
+        "learningStyleFit": ["reading", "handsOn"]
+      },
+      { "title": "Security Engineer", "level": "mid",
+        "requiredSkills": { "Security": 3, "CloudSecurity": 3, "ThreatModeling": 2, "Automation": 2 },
+        "niceToHave": { "IR": 2 },
+        "personalityTraits": ["problemSolving", "ownership"],
+        "learningStyleFit": ["reading", "handsOn"]
+      },
+      { "title": "Security Architect", "level": "advanced",
+        "requiredSkills": { "Security": 4, "Architecture": 4, "CloudSecurity": 4, "GRC": 3 },
+        "niceToHave": { "Leadership": 2 },
+        "personalityTraits": ["vision", "mentorship"],
+        "learningStyleFit": ["reading", "handsOn"]
+      }
+    ]
+  },
+  {
+    "id": "ai-research",
+    "name": "AI Research / Applied Scientist",
+    "description": "Explores novel ML methods and applies them to products.",
+    "industry": "Technology",
+    "averageSalary": "$130k–$200k+",
+    "jobGrowth": "High",
+    "desiredRIASEC": { "R": 0.30, "I": 0.85, "A": 0.50, "S": 0.30, "E": 0.30, "C": 0.50 },
+    "desiredBigFive": { "Openness": 0.90, "Conscientiousness": 0.70, "Extraversion": 0.40, "Agreeableness": 0.50, "Neuroticism": 0.35 },
+    "workValues": ["Achievement", "Independence", "Recognition"],
+    "roles": [
+      { "title": "Applied Scientist I", "level": "entry",
+        "requiredSkills": { "Python": 3, "ML": 3, "Statistics": 3, "Experimentation": 2 },
+        "niceToHave": { "DeepLearning": 2 },
+        "personalityTraits": ["curious", "researchMindset"],
+        "learningStyleFit": ["reading", "handsOn"]
+      },
+      { "title": "Applied Scientist II", "level": "mid",
+        "requiredSkills": { "ML": 4, "DeepLearning": 3, "Statistics": 4, "MLOps": 3 },
+        "niceToHave": { "PaperReview": 2 },
+        "personalityTraits": ["problemSolving", "communication"],
+        "learningStyleFit": ["reading", "handsOn"]
+      },
+      { "title": "Senior / Staff Applied Scientist", "level": "advanced",
+        "requiredSkills": { "ML": 4, "DeepLearning": 4, "Causality": 3, "Optimization": 3, "Leadership": 2 },
+        "niceToHave": { "Publications": 1 },
+        "personalityTraits": ["vision", "mentorship"],
+        "learningStyleFit": ["reading", "handsOn"]
+      }
+    ]
+  }
+]

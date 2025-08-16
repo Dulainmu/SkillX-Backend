@@ -1,0 +1,49 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node scripts/runMigration.js",
+    "migrate:seed": "node scripts/runMigration.js seed",
+    "migrate:update": "node scripts/runMigration.js migrate",
+    "test:matching": "node src/utils/testUnifiedMatching.js",
+    "validate:careers": "node scripts/validateCareerRoles.js",
+    "create:test-careers": "node scripts/createTestCareerRoles.js",
+    "fix:careers": "node scripts/fixCareerRoles.js",
+    "add:materials": "node scripts/addLearningMaterials.js",
+    "check:assessment": "node scripts/checkAssessmentData.js",
+    "cleanup:old-data": "node scripts/cleanupOldData.js",
+    "clear:quiz-results": "node scripts/clearOldQuizResults.js",
+    "check:career-id": "node scripts/checkCareerById.js",
+    "check:admin-users": "node scripts/checkAdminUsers.js",
+    "check:user-progress": "node scripts/checkUserProgress.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.18.0",
+    "mongoose": "^8.16.4",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "eslint": "^9.33.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.3.0",
+    "nodemon": "^3.1.10"
+  }
+}
