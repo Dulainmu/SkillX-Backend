@@ -25,7 +25,10 @@
     "clear:quiz-results": "node scripts/clearOldQuizResults.js",
     "check:career-id": "node scripts/checkCareerById.js",
     "check:admin-users": "node scripts/checkAdminUsers.js",
-    "check:user-progress": "node scripts/checkUserProgress.js"
+    "check:user-progress": "node scripts/checkUserProgress.js",
+    "fix:career-skills": "node scripts/fixCareerSkills.js",
+    "test:skill-matching": "node scripts/testSkillMatching.js",
+    "test:skill-gap": "node scripts/testSkillGapAnalysis.js"
   },
   "keywords": [],
   "author": "",

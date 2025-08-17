@@ -35,6 +35,7 @@ const adminLearningJourneyRoutes = require('./routes/adminLearningJourneyRoutes'
 const adminProjectSubmissionsRoutes = require('./routes/adminProjectSubmissionsRoutes');
 const adminAchievementsRoutes = require('./routes/adminAchievementsRoutes');
 const adminUserProgressRoutes = require('./routes/adminUserProgressRoutes');
+const skillGapRoutes = require('./routes/skillGapRoutes');
 
 // Apply routes
 app.use('/api/learning-materials', learningMaterialRoutes);
@@ -42,6 +43,7 @@ app.use('/api/admin/learning-journeys', adminLearningJourneyRoutes);
 app.use('/api/admin/project-submissions', adminProjectSubmissionsRoutes);
 app.use('/api/admin/achievements', adminAchievementsRoutes);
 app.use('/api/admin/user-progress', adminUserProgressRoutes);
+app.use('/api/skill-gap', skillGapRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running');
