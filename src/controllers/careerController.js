@@ -162,6 +162,8 @@ exports.submitQuiz = async (req, res) => {
             industry: 'Technology', // Default since CareerRole doesn't have industry
             averageSalary: match.averageSalary,
             jobGrowth: match.jobGrowth,
+            displaySkills: match.displaySkills,
+            displayTasks: match.displayTasks,
             currentRole: match.currentRole
                 ? { title: match.currentRole.title, level: match.currentRole.level, score: match.currentRole.score }
                 : null,
@@ -228,7 +230,9 @@ exports.submitQuiz = async (req, res) => {
                 nextRole: match.nextRole,
                 skills: match.skills,
                 roadmap: match.roadmap,
-                detailedRoadmap: match.detailedRoadmap
+                detailedRoadmap: match.detailedRoadmap,
+                displaySkills: match.displaySkills,
+                displayTasks: match.displayTasks
             }))
         });
     } catch (err) {
@@ -332,6 +336,8 @@ exports.createCareer = async (req, res) => {
     careerData.skills = careerData.skills || [];
     careerData.roadmap = careerData.roadmap || [];
     careerData.detailedRoadmap = careerData.detailedRoadmap || [];
+    careerData.displaySkills = careerData.displaySkills || [];
+    careerData.displayTasks = careerData.displayTasks || [];
     
     const newCareer = new CareerRole(careerData);
     const savedCareer = await newCareer.save();

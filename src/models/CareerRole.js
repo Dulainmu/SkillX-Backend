@@ -52,6 +52,10 @@ const careerRoleSchema = new mongoose.Schema({
   averageSalary: { type: String },
   jobGrowth: { type: String },
   
+  // Display fields for frontend career cards
+  displaySkills: { type: [String], default: [] }, // Skills shown in "Skills You'll Learn" section
+  displayTasks: { type: [String], default: [] }, // Tasks shown in "What You'll Do" section
+  
   // New personality data fields for unified matching
   desiredRIASEC: {
     R: { type: Number, min: 0, max: 1, default: 0.5 }, // Realistic

@@ -28,7 +28,8 @@
     "check:user-progress": "node scripts/checkUserProgress.js",
     "fix:career-skills": "node scripts/fixCareerSkills.js",
     "test:skill-matching": "node scripts/testSkillMatching.js",
-    "test:skill-gap": "node scripts/testSkillGapAnalysis.js"
+    "test:skill-gap": "node scripts/testSkillGapAnalysis.js",
+    "update:display-fields": "node scripts/updateDisplayFields.js"
   },
   "keywords": [],
   "author": "",
