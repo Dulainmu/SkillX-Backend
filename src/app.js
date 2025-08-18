@@ -30,6 +30,7 @@ app.use(cors({
 app.use(express.json());
 
 // Import routes
+const userRoutes = require('./routes/userRoutes');
 const learningMaterialRoutes = require('./routes/learningMaterialRoutes');
 const adminLearningJourneyRoutes = require('./routes/adminLearningJourneyRoutes');
 const adminProjectSubmissionsRoutes = require('./routes/adminProjectSubmissionsRoutes');
@@ -38,6 +39,7 @@ const adminUserProgressRoutes = require('./routes/adminUserProgressRoutes');
 const skillGapRoutes = require('./routes/skillGapRoutes');
 
 // Apply routes
+app.use('/api/auth', userRoutes);
 app.use('/api/learning-materials', learningMaterialRoutes);
 app.use('/api/admin/learning-journeys', adminLearningJourneyRoutes);
 app.use('/api/admin/project-submissions', adminProjectSubmissionsRoutes);
